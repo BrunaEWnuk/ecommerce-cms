@@ -1,23 +1,24 @@
 import { SidebarForm } from "@/components/layout/sidebar-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCategory, useCreateCategory, useDeleteCategory, useUpdateCategory } from "../hooks/use-category";
-import {z} from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-  name: z.string().min(2, 'Informe pelo menos 2 caractéres').max(60, 'Máximo 60 caractéres'),
+    name: z.string().min(2, 'Informe pelo menos 2 caractéres').max(60, 'Máximo 60 caractéres'),
 })
-export function CategoryForm(){
-    
-    const {id} = useParams<{id: string}>(); //garantir que ele recupere o parametro que ta vindo
-    const navigate = useNavigate();
-    const {data, isLoading} = useCategory(id ?? '') // ?? = se a da esquerda nao existir pega o da direita
 
-    const createCategory = useCreateCategory(); // nao desestrutura pra usar o create o category no mesmo evento
+export function CategoryForm() {
+    const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
+    const { data, isLoading } = useCategory(id ?? '');
+
+    const createCategory = useCreateCategory();
     const updateCategory = useUpdateCategory();
     const deleteCategory = useDeleteCategory();
 
@@ -36,20 +37,19 @@ export function CategoryForm(){
         }
     }, [data, form])
 
-    function onSubmit(value: z.infer<typeof formSchema>){
-        console.log('Dados:', value)
+    function onSubmit(value: z.infer<typeof formSchema>) {
         if (id) {
             updateCategory.mutate(
-                {id, category:{name:value.name}},
+                {id, category: {name: value.name}},
                 {
                     onSettled: () => {
                         navigate('/categories')
                     }
                 }
             );
-        } else {
+        } else  {
             createCategory.mutate(
-                {name:value.name},
+                {name: value.name},
                 {
                     onSettled: () => {
                         navigate('/categories')
@@ -57,10 +57,9 @@ export function CategoryForm(){
                 }
             );
         }
-
     }
 
-    function onDelete(){
+    function onDelete() {
         if (id) {
             deleteCategory.mutate(id, {
                 onSettled: () => {
@@ -70,33 +69,30 @@ export function CategoryForm(){
         }
     }
 
- return (   
-<SidebarForm 
-title="Cadastro de Categoria"
-        onSave={form.handleSubmit(onSubmit)} 
-        onDelete={onDelete}
-        loading={isLoading}
-        {...(id && {onDelete: onDelete})}
+    return (
+        <SidebarForm
+            title={id ? 'Editar Categoria' : 'Adicionar Categoria'}
+            onSave={form.handleSubmit(onSubmit)}
+            {...(id && { onDelete: onDelete })}            
+            loading={isLoading}
         >
-    
-    <div className="space-y-4">
-    <Form {...form}>
- <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nome Categoria</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-    </Form>
-    </div>
-</SidebarForm>
-
- )   
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Nome Categoria</FormLabel>
+                                <FormControl>
+                                    <Input {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </form>
+            </Form>
+        </SidebarForm>
+    )
 }

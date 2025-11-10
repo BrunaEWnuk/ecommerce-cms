@@ -16,16 +16,17 @@ export const BrandService = {
     },
 
     async getById(id: string): Promise<BrandDTO> {
-        const result = await api.get(`${_ENDPOINT}/${id}`)
+        const result = await api.get(`${_ENDPOINT}/${id}`);
         return result.data;
     },
 
     async update(id: string, brand: BrandDTO): Promise<BrandDTO> {
         const result = await api.put(`${_ENDPOINT}/${id}`, brand);
         return result.data;
-
     },
-    async delete(id: string): Promise<void> {
+
+    async delete(id: string): Promise<void>{
         await api.delete(`${_ENDPOINT}/${id}`);
     }
+
 };

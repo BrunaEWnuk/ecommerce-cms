@@ -1,17 +1,17 @@
 
 import { BreadCrumb } from "@/components/layout/bread-crumb"
-import { BrandDataTable } from "./data-table/brand-data-table"
+import { ProductDataTable } from "./data-table/product-data-table"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import { Plus, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Outlet, useNavigate } from "react-router-dom"
 
-export function BrandLayout() {
+export function ProductLayout() {
 
     const navigate = useNavigate();
     
     function handleCreate() {
-        navigate('/brands/new');
+        navigate('/products/new');
     }
 
     return (
@@ -37,7 +37,7 @@ export function BrandLayout() {
                 </div>
 
                 <div>
-                    <BrandDataTable />
+                    <ProductDataTable />
                     <Outlet />
                 </div>
 
