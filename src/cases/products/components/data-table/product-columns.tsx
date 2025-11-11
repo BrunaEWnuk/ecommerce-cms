@@ -61,7 +61,7 @@ export const productColumns: ColumnDef<ProductDTO>[] = [
       return (
         <p className={!product.active ? "text-gray-300" : ''}>
             <IntlProvider locale="pt-BR">
-                <FormattedNumber value={product.price} style="currency" currency="BRL" />
+                <FormattedNumber value={product.price!} style="currency" currency="BRL" />
             </IntlProvider>
         </p>       
       )

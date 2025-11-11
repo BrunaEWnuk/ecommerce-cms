@@ -6,11 +6,15 @@ import { BrandLayout } from "./cases/brands/components/brand-layout";
 import { BrandForm } from "./cases/brands/components/brand-form";
 import { ProductLayout } from "./cases/products/components/product-layout";
 import { ProductForm } from "./cases/products/components/product-form";
+import { SidebarProvider } from "./components/ui/sidebar";
+import { AppSidebar } from "./components/layout/app-sidebar";
 
 function App() {
   return (
     <div className="wrapper">
-      <main>
+      <SidebarProvider>
+      <AppSidebar/>
+      <main className="w-full">
         <Routes>
           <Route path="/categories" element={<CategoryLayout />}>
             <Route path="new" element={<CategoryForm />} />
@@ -26,6 +30,7 @@ function App() {
           </Route>
         </Routes>
       </main>
+      </SidebarProvider>
     </div>
   );
 }
