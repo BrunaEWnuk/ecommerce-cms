@@ -30,3 +30,5 @@ export const OrderService = {
     }
 
 };
+
+// por usar um hook nao precisa tratar o erro no service

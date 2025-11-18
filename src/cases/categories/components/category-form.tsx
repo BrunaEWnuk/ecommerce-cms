@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-    name: z.string().min(2, 'Informe pelo menos 2 caractéres').max(60, 'Máximo 60 caractéres'),
+    name: z.string().min(2, 'Informe pelo menos 2 caracteres').max(60, 'Máximo 60 caracteres'),
 })
 
 export function CategoryForm() {
@@ -42,7 +42,7 @@ export function CategoryForm() {
             updateCategory.mutate(
                 {id, category: {name: value.name}},
                 {
-                    onSettled: () => {
+                    onSettled: () => {   // se der certo ou errado vai navergar para o caminho
                         navigate('/categories')
                     }
                 }

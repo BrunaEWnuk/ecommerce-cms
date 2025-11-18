@@ -1,29 +1,39 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"; // o tanstack entende que algo foi alterado e atualiza em tela
-import { CategoryService } from "../services/category.service";
-import type { CategoryDTO } from "../dtos/category.dto";
+import { CustomerService, type CustomerDTO } from "../services/customer.service";
 import { toast } from "react-toastify";
 
+export interface Customer {
+  name: string;
+  address?: string;
+  zipcode?: string;
+  city?: {
+    name?: string;
+    state?: {
+      acronym?: string;
+    };
+  };
+}
 
-export function useCategories() {
-    return useQuery<CategoryDTO[]>({
-        queryKey: ['categories'],
-        queryFn: CategoryService.list
+export function useCustomers() {
+    return useQuery<CustomerDTO[]>({
+        queryKey: ['customers'],
+        queryFn: CustomerService.list
     });
 }
 
-export function useCategory(id: string) {   // useQuery é para consultar
-    return useQuery<CategoryDTO>({
-        queryKey: ['category', id],
-        queryFn: () => CategoryService.getById(id),
+export function useCustomer(id: string) {   // useQuery é para consultar
+    return useQuery<CustomerDTO>({
+        queryKey: ['customer', id],
+        queryFn: () => CustomerService.getById(id),
         enabled: !!id //-> or Boolean(id)
     });
 }
 
-export function useCreateCategory(){
+export function useCreateCustomer(){
     const queryClient = useQueryClient();
 
-    return useMutation<CategoryDTO, Error, Omit<CategoryDTO, 'id'>>({ // mutate é para alterar != consultar
-        mutationFn: (category: Omit<CategoryDTO, 'id'>) => CategoryService.create(category),  // o Omit foi usado para quando tem uma classe onde o atributo nao tem "?" mas quer omiti-lo
+    return useMutation<CustomerDTO, Error, Omit<CustomerDTO, 'id'>>({ // mutate é para alterar != consultar
+        mutationFn: (customer: Omit<CustomerDTO, 'id'>) => CustomerService.create(customer as CustomerDTO),  // o Omit foi usado para quando tem uma classe onde o atributo nao tem "?" mas quer omiti-lo
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['categories']}); // para ignorar o cache pq tá sendo alterado
             toast.success('Registro adicionado com sucessso!') // toast: só informando que deu sucesso ou erro
@@ -34,11 +44,11 @@ export function useCreateCategory(){
     });
 }
 
-export function useUpdateCategory(){
+export function useUpdateCustomer(){
     const queryClient = useQueryClient();
 
-    return useMutation<CategoryDTO, Error, {id: string, category: CategoryDTO}>({
-        mutationFn: ({id, category}) => CategoryService.update(id, category),
+    return useMutation<CustomerDTO, Error, {id: string, customer: CustomerDTO}>({
+        mutationFn: ({id, customer}) => CustomerService.update(id, customer),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['categories']});
             toast.success('Registro alterado com sucessso!')
@@ -49,11 +59,11 @@ export function useUpdateCategory(){
     });
 }
 
-export function useDeleteCategory(){
+export function useDeleteCustomer(){
     const queryClient = useQueryClient();
 
     return useMutation<void, Error, string>({
-        mutationFn: (id: string) => CategoryService.delete(id),
+        mutationFn: (id: string) => CustomerService.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['categories']});
             toast.success('Registro exluído com sucessso!')

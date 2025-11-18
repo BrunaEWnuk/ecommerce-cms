@@ -13,9 +13,13 @@ export interface CityDTO {
 }
 
 export interface CustomerDTO {
-    id?: string;
-    name: string;
-    address: string;
-    zipcode: string;
-    city: CityDTO;
+  name: string;
+  address?: string;
+  zipcode?: string;
+  city?: {
+    name?: string;
+    state?: {
+      acronym?: string;
+    };
+  };
 }
